@@ -151,7 +151,21 @@ export default function ScenesReducer(
     }
   };
 
-  staleScenes.forEach(mergeScene);
+ // workaround for broken navigation reset
+  let k = null;
+  let v= null;
+  staleScenes.forEach(scene => {
+    let { key } = scene;
+    k = key;
+    v = scene;
+  });
+
+  newStaleScenes = k && v ? new Map([[k, v]]) : new Map();
+  console.log("NEW_STALE_SCENES", newStaleScenes);
+  console.log("STALE_SCENES", staleScenes);
+  newStaleScenes.forEach(mergeScene);
+  // staleScenes.forEach(mergeScene);
+
   freshScenes.forEach(mergeScene);
 
   nextScenes.sort(compareScenes);
